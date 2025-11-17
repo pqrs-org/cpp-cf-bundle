@@ -16,6 +16,10 @@ namespace pqrs {
 namespace cf {
 namespace bundle {
 
+constexpr const char* package_type_application = "APPL";
+constexpr const char* package_type_framework = "FMWK";
+constexpr const char* package_type_bundle = "BNDL";
+
 std::optional<std::string> get_package_type(const std::filesystem::path& bundle_path) {
   if (auto url = pqrs::cf::make_url(bundle_path.string())) {
     if (auto bundle = pqrs::cf::cf_ptr(CFBundleCreate(nullptr, *url))) {
@@ -29,6 +33,10 @@ std::optional<std::string> get_package_type(const std::filesystem::path& bundle_
   }
 
   return std::nullopt;
+}
+
+bool application(const std::filesystem::path& bundle_path) {
+  return get_package_type(bundle_path) == package_type_application;
 }
 
 } // namespace bundle
