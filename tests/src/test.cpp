@@ -42,6 +42,13 @@ int main(void) {
           "/bin/ls");
       expect(std::nullopt == actual);
     }
+
+    // With white space
+    {
+      auto actual = pqrs::cf::bundle::get_package_type(
+          "/System/Applications/Utilities/Activity Monitor.app");
+      expect(pqrs::cf::bundle::package_type_application == actual);
+    }
   };
 
   "application"_test = [] {
@@ -67,6 +74,12 @@ int main(void) {
     {
       expect(false == pqrs::cf::bundle::application(
                           "/Applications/NotFound.app"));
+    }
+
+    // With white space
+    {
+      expect(true == pqrs::cf::bundle::application(
+                         "/System/Applications/Utilities/Activity Monitor.app"));
     }
   };
 
