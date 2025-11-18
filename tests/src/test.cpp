@@ -29,10 +29,25 @@ int main(void) {
       expect(pqrs::cf::bundle::package_type_bundle == actual);
     }
 
+    // With white space
+    {
+      auto actual = pqrs::cf::bundle::get_package_type(
+          "/System/Applications/Utilities/Activity Monitor.app");
+      expect(pqrs::cf::bundle::package_type_application == actual);
+    }
+
     // Not found
     {
       auto actual = pqrs::cf::bundle::get_package_type(
           "/Applications/NotFound.app");
+      expect(std::nullopt == actual);
+    }
+
+    // Not found (guess_if_missing_package_type)
+    {
+      auto actual = pqrs::cf::bundle::get_package_type(
+          "/Applications/NotFound.app",
+          true);
       expect(std::nullopt == actual);
     }
 
@@ -43,10 +58,26 @@ int main(void) {
       expect(std::nullopt == actual);
     }
 
-    // With white space
+    // Not bundle (guess_if_missing_package_type)
     {
       auto actual = pqrs::cf::bundle::get_package_type(
-          "/System/Applications/Utilities/Activity Monitor.app");
+          "/bin/ls",
+          true);
+      expect(std::nullopt == actual);
+    }
+
+    // No CFBundlePackageType
+    {
+      auto actual = pqrs::cf::bundle::get_package_type(
+          "data/NoBundlePackageType.app");
+      expect(std::nullopt == actual);
+    }
+
+    // No CFBundlePackageType (guess_if_missing_package_type)
+    {
+      auto actual = pqrs::cf::bundle::get_package_type(
+          "data/NoBundlePackageType.app",
+          true);
       expect(pqrs::cf::bundle::package_type_application == actual);
     }
   };
@@ -70,16 +101,22 @@ int main(void) {
                           "/System/Library/Frameworks/Security.framework/Versions/A/MachServices/SecurityAgent.bundle"));
     }
 
+    // With white space
+    {
+      expect(true == pqrs::cf::bundle::application(
+                         "/System/Applications/Utilities/Activity Monitor.app"));
+    }
+
     // Not found
     {
       expect(false == pqrs::cf::bundle::application(
                           "/Applications/NotFound.app"));
     }
 
-    // With white space
+    // No CFBundlePackageType (guess)
     {
       expect(true == pqrs::cf::bundle::application(
-                         "/System/Applications/Utilities/Activity Monitor.app"));
+                         "data/NoBundlePackageType.app"));
     }
   };
 
