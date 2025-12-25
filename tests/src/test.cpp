@@ -29,6 +29,13 @@ int main(void) {
       expect(pqrs::cf::bundle::package_type_bundle == actual);
     }
 
+    // FNDR
+    {
+      auto actual = pqrs::cf::bundle::get_package_type(
+          "/System/Library/CoreServices/Finder.app");
+      expect(pqrs::cf::bundle::package_type_finder == actual);
+    }
+
     // With white space
     {
       auto actual = pqrs::cf::bundle::get_package_type(
