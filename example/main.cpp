@@ -1,7 +1,7 @@
 #include <iostream>
 #include <pqrs/cf/bundle.hpp>
 
-int main(void) {
+int main() {
   // APPL
   {
     std::filesystem::path path("/System/Applications/Utilities/Terminal.app");
